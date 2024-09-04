@@ -39,8 +39,8 @@ class UserController extends Controller
         }
 
         $data = User::select('name', 'photo', 'email')->find(Auth::id());
-        $data->name = $req->name;
-        $data->email = $req->email;
+
+        $photoName = $data->photo;
 
         if ($req->hasFile('photo')) {
             $photo = $req->file('photo');
@@ -48,7 +48,11 @@ class UserController extends Controller
             $photo->storeAs('public/image/' . $photoName);
         }
 
-        $data->update();
+        $data->update([
+            'name' => $req->name,
+            'email' => $req->email,
+            'photo' => $photoName
+        ]);
 
         return Helper::APIResponse('success update profile', 200, null, $data);
     }

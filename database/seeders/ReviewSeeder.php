@@ -14,6 +14,12 @@ class ReviewSeeder extends Seeder
     public function run(): void
     {
         Review::create([
+            'user_id' => 1,
+            'destination_id' => 1,
+            'star' => '4',
+            'review_description' => 'mantap'
+        ]);
+        Review::create([
             'user_id' => 2,
             'destination_id' => 1,
             'star' => '4',
@@ -21,12 +27,6 @@ class ReviewSeeder extends Seeder
         ]);
         Review::create([
             'user_id' => 3,
-            'destination_id' => 1,
-            'star' => '4',
-            'review_description' => 'mantap'
-        ]);
-        Review::create([
-            'user_id' => 4,
             'destination_id' => 1,
             'star' => '4',
             'review_description' => 'mantap'
@@ -39,7 +39,7 @@ class ReviewSeeder extends Seeder
             'review_description' => 'mantap'
         ]);
         Review::create([
-            'user_id' => 4,
+            'user_id' => 3,
             'destination_id' => 2,
             'star' => '4',
             'review_description' => 'mantap'
