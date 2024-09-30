@@ -7,6 +7,7 @@ use App\Helpers\Helper;
 use Illuminate\Http\Request as Req;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -38,21 +39,27 @@ class UserController extends Controller
             return Helper::APIResponse('error validation', 422, $validation->errors(), null);
         }
 
-        $data = User::select('name', 'photo', 'email')->find(Auth::id());
+        $data = User::find(Auth::id());
 
         $photoName = $data->photo;
 
         if ($req->hasFile('photo')) {
+            if ($data->photo) {
+                Storage::delete('public/image/' . $data->photo);
+            }
+
             $photo = $req->file('photo');
             $photoName = time() . '.' . $photo->getClientOriginalExtension();
             $photo->storeAs('public/image/' . $photoName);
         }
-
+        
         $data->update([
             'name' => $req->name,
             'email' => $req->email,
             'photo' => $photoName
         ]);
+
+        $data = $data->makeHidden(['created_at','updated_at','email_verified_at']);
 
         return Helper::APIResponse('success update profile', 200, null, $data);
     }
